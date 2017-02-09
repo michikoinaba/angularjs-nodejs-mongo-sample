@@ -1,0 +1,21 @@
+{
+  "name": "angularjs-nodejs-mongo",
+  "version": "1.0.0",
+  "description": "test tool rental site with nodejs, angularjs, and mongodb",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "michiko inaba",
+  "license": "BSD",
+  "dependencies": {
+    "express": "~4.14.0",
+    "method-override": "~2.3.7",
+    "body-parser": "~1.16.0",
+    "mongoose": "~4.7.7",
+    "mongodb": "~2.2.22"
+  },
+  "devDependencies": {
+    "nodemon": "~1.11.0"
+  }
+}
