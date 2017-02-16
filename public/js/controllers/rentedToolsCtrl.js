@@ -5,7 +5,6 @@ angular.module('rentedToolsCtrl', [])
 .controller('rentedToolsCtrl',['$scope','$http','rented_tools', function($scope, $http,rented_tools ) {
 	
 	
-	
 	//get function
 	rented_tools.get() //rented_tools is the table name.  populate all rented_tools from the rented_tools table
 	.success(function(data) {

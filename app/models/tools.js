@@ -1,24 +1,15 @@
 
-
-//Dependencies
-// grab the things we need
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-//Schema
-var Toolschema = new mongoose.Schema({
+// define our nerd model
+// module.exports allows us to pass this to other files when it is called
+module.exports = mongoose.model('tools', {
+	
 	 type: {type: String },
 	 name: {type: String},
 	 description: {type: String},
 	 available: {type: String},
-	 price: {type: Number}
+	 price: {type: String}
 });
-
-
-//Return model
-var tools = mongoose.model('tools', Toolschema);
-
-//make this available to our users in our Node applications
-module.exports = tools;
 
 

@@ -7,7 +7,7 @@
      $routeProvider
     .when('/', {
         templateUrl: 'views/read.html',
-        controller: 'rentedToolsCtrl',
+        controller: 'toolsCtrl',
         
       })
     /*  .when('/rented', {

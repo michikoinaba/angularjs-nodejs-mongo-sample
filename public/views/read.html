@@ -1,10 +1,10 @@
-<div ng-controller="rentedToolsCtrl">
+<div ng-controller="toolsCtrl">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
 				<br> <br>
 				<!-- used for searching the current list -->
-				<input type="text" ng-model="search" class="form-control"
+				<input type="text" ng-model="search" class="form-control" 
 					placeholder="Search product..." /> <br>
 				<!-- table that shows product record list -->
 				<div id="exportable">
@@ -29,9 +29,9 @@
 									<td ng-if=" d.available == 1">Yes</td>
 									<td ng-if=" d.available == 0">No</td>
 									<td class="text-align-center">${{ d.price }}/week</td>
-									<td id="buttons_{{d.id}}" class="col-sm-3"><a  
+									<td id="buttons_{{d._id}}" class="col-sm-3"><a  
 										class="waves-effect waves-light btn margin-bottom-1em"
-										ng-click="showEditForm(d.id)"><i
+										ng-click="showEditForm(d._id)"><i
 											class="material-icons left">edit</i>Edit</a> <a
 										ng-click="deleteProduct(d.id)"
 										class="waves-effect waves-light btn margin-bottom-1em"><i
@@ -60,7 +60,7 @@
 
 					<div class="input-field col s12"
 						ng-class="{ 'has-error':  modalEditForm.form.type.$invalid }">
-						<input style="padding-left: 70px;" ng-model="type" type="text"
+						<input style="padding-left: 70px;" ng-model="formData.type" type="text"
 							name="type" id="form-type" required> <label for="type">Type</label>
 
 
@@ -75,7 +75,7 @@
 
 					<div class="input-field col s12"
 						ng-class="{ 'has-error':  modalEditForm.form.name.$invalid }">
-						<input style="padding-left: 70px;" ng-model="name" type="text"
+						<input style="padding-left: 70px;" ng-model="formData.name" type="text"
 							class="validate" name="name" id="form-name" required><label
 							for="name">Name</label>
 
@@ -90,7 +90,7 @@
 
 					<div class="input-field col s12"
 						ng-class="{ 'has-error':  modalEditForm.form.description.$invalid }">
-						<textarea style="padding-top: 30px;" ng-model="description"
+						<textarea style="padding-top: 30px;" ng-model="formData.description"
 							type="text" name="description"
 							class="validate materialize-textarea" required></textarea>
 						<label for="description">Description</label>
@@ -107,10 +107,11 @@
 						<label style="font-size: 1rem;">Available</label>
 					</p>
 					<p>
-						<input ng-model="edit_available" type="radio" value="1"
+						<input ng-model="formData.edit_available" type="radio" value="1"
 							name="edit_available" id="edit_available_yes" /> <label
-							for="edit_available_yes">Yes</label> <input
-							ng-model="edit_available" type="radio" value="0"
+							for="edit_available_yes">Yes</label> 
+							
+					  <input  ng-model="formData.edit_available" type="radio" value="0"
 							name="edit_available" id="edit_available_no" /> <label
 							for="edit_available_no">No</label>
 					</p>
@@ -120,11 +121,11 @@
 
 					<div class="input-field col s12"
 						ng-class="{ 'has-error':  modalEditForm.form.price.$invalid }">
-						<input style="padding-left: 70px;" ng-model="price" type="text"
+						<input style="padding-left: 70px;" ng-model="formData.price" type="text"
 							name="price" id="form-price" required> <label for="price">Price</label>
 
 						<div class="help-block"
-							ng-messages="modalEditForm.form.price.$error"
+							ng-messages="modalEditForm.form..price.$error"
 							ng-if="modalEditForm.form.price.$touched">
 
 							<p ng-message="required">Price field is required.</p>

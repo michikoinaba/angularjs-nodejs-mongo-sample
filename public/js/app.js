@@ -1,36 +1,6 @@
 
-angular.module('app', ['ngRoute', 'appRoutes', 'rentedToolsCtrl', 'navCtrl', 'RentedToolService']);
+angular.module('app', ['ngRoute', 'appRoutes', 'rentedToolsCtrl','toolsCtrl', 'navCtrl', 'RentedToolService','ToolService']);
 
-/*var app = angular.module('app', ['ngRoute'])//,'ngMessages','chart.js','ngSanitize'
-.config(function ( $routeProvider,$compileProvider ) {
-    
-    'use strict';
-    
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(|blob|):/);
-    
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/read.html',
-        controller: 'projectsCtrl',
-        
-      })
-     .when('/rented', {
-          templateUrl: 'views/rentedtools.html',
-          controller: 'rentedCtrl',
-          
-        })
-   
-    
-      .otherwise({
-        redirectTo: '/'
-      });
-    
-  }).run(function($rootScope){
-   $rootScope.$on('$routeChangeError', function(event, current, previous, rejection){
-      console.log(event, current, previous, rejection)
-    })
-  });
-*/
 
 
 /**

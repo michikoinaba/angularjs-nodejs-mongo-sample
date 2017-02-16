@@ -1,9 +1,98 @@
 var rented_tools = require('./models/rented_tools');
+var tools = require('./models/tools');
 
- module.exports = function(app) {
+//var router = require('express').Router();
+
+ module.exports = function(router) {
 	 
 	 
-	  app.get('/api/rentedtools', function(req, res) {
+	 //populate all tools data from the tools table.
+	 router.get('/api/tools', function(req, res) {
+		
+         // use mongoose to get all nerds in the database
+		  tools.find(function(err, data) {
+
+             // if there is an error retrieving, send the error. 
+                             // nothing after res.send(err) will execute
+             if (err)
+                 res.send(err);
+         
+           res.json(data); // return all nerds in JSON format
+         });
+     });
+	 
+	  
+	//get the selected tool
+	 router.get('/api/tools/:_id', function(request,response){
+	 
+	    
+	    tools.findById( {_id:request.params._id }, function(err, tool){
+			   if(err){
+				   return  response.send('ERROR!! '+err);
+			   }
+			   else{
+				   response.json(tool);
+				 
+			   }
+			   
+		   });
+	
+		});
+		
+	//update the selected tool
+	///
+	 router.put('/api/tools/:_id', function (req, res){
+	
+		  return tools.findById(req.params._id, function (err, tool) {
+		     tool.name = req.body.name;
+		     tool.type = req.body.type;
+		     tool.description = req.body.description;
+		     tool.price = req.body.price;
+		     
+		     if(req.body.edit_available==1)	
+		     tool.available = 1;
+		     else
+		     tool.available = 0;
+		     //console.log(JSON.stringify(req.body));
+		    return tool.save(function (err) {
+		      if (err) {
+		      
+		        console.log('Error '+err);
+		      }
+		      return res.send(tool);
+		    });
+		  });
+		 
+		});
+	////
+	/* app.put('/api/tools/:_id', function(request,response){
+		
+		
+		 var values = request.body;
+		    var id = request.params._id;
+		    tools.update({_id: id}, values, function(err, values) {
+		        if (!err) {
+		        	response.json(values);
+		        } else {
+		        	response.write("fail");
+		        }
+		    });
+		//response.json({type:request, _id: request.params._id});
+		tools.save({ _id: request.params._id },  { $set: { name: request.body.name, description: request.body.description,price: request.body.price ,
+			
+			type: request.body.type,  available: request.body.available }},
+			
+			function(err, tool){
+				if(err)
+					 return  response.send('ERROR!! '+err);
+				
+				
+			});
+			
+		
+		});
+	 */
+	 router.get('/api/rentedtools', function(req, res) {
 		  
           // use mongoose to get all nerds in the database
 		  rented_tools.find(function(err, data) {
@@ -36,99 +125,27 @@ var rented_tools = require('./models/rented_tools');
 		*/
 	// frontend routes =========================================================
      // route to handle all angular requests
-     app.get('*', function(req, res) {
+	 router.get('*', function(req, res) {
     	 res.sendFile('/var/www/html/angularjs-nodejs-mongo/public/index.html'); // load our public/index.html file
       });
      
   
    
 }//module.exports = function(app) {
-
- //
- /*
- var Contact = require('./models/contact');
-
  
- function showAllContact(response){
- 	
- 	Contact.find(function(err, contacts){
- 		
- 		if(err){
- 			
- 			response.send('Error message: '+err);
- 		}
- 		else{
- 			
- 			response.json(contacts); // return all contacts in JSON format
- 		}
- 		
- 	});
- };
-
- function showSelectedContact(response, id){
- 	
- 	Contact.findById(id,function(err, contact){
- 		
- 		if(err){
- 			
- 			response.send('Error message: '+err);
- 		}
- 		else{
- 			
- 			response.json(contact); // return all contacts in JSON format
- 		}
- 		
- 	});
- };
- //api calls
 
 
- var contactApp = function (app) {
- 	
- 	//default page. show all contacts
- 	app.get('/api/contacts',function(request,response){
- 		
- 		showAllContact(response);
- 	});
- 	
- 	//edit the selected contact
- 	app.put('/api/contacts/:contact_id', function(request,response){
- 		
- 		Contact.findByIdAndUpdate({_id: request.params.contact_id},
- 				
- 				{ $set: { name: request.body.name, phone: request.body.phone }}, function (err, contact) {
- 			    
- 					//if there are errors, show it
- 				if (err) 
- 				  return  res.send(err);
- 			 
- 				//no errors. show the edited contact
- 				showSelectedContact(response, request.params.contact_id);
- 			});
- 	});
- 	
+ /**
+  * chome way to output an object
+  * 
+  * @param obj
+  */
+ function dumpObject (obj) {
+     var output, property;
+     for (property in obj) {
+     	
+         output += property + ': ' + obj[property] + '; ';
+     }
+     console.log(' dumpObject '+output);
+ }
 
- 	//post page to add a new contact
- 	app.post('/api/contacts',function(request,response){
- 		
- 		Contact.create({
- 			name: request.body.name,
- 			phone: request.body.phone
- 			
- 		},function(err,contact){
- 			
- 			if(err){
- 				
- 				response.send('Error message: '+err);
- 			}else{
- 				
- 				showAllContact(response);
- 				
- 			}//else
- 		});
- 		
- 	});
- 	
- };//var contactApp = function (app) {
-
- module.exports = contactApp; */
