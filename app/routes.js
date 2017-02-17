@@ -64,6 +64,54 @@ var tools = require('./models/tools');
 		  });
 		 
 		});
+	 
+	 
+	 ///add new tool
+	 router.post('/api/tools', function (req, res){
+		    var available;
+		    
+		    if(req.body.add_available==1)	
+			     available = 1;
+			     else
+			     available = 0;
+		    
+		    // create a new tool
+		    var tool = tools({
+		      name: req.body.name,
+		      type: req.body.type,
+		      description: req.body.description,
+		      price:req.body.price,
+		      available:available
+		      
+		    });
+		 	
+		     
+		 return tool.save(function(err){
+			
+			 if(err)
+				 console.log('Error '+err);
+			 
+			 return res.send(tool);
+		 });
+		
+		 
+		});
+	 
+	 //delete a tool from the selected id
+	//get the selected tool
+	 router.delete('/api/tools/:_id', function(req,res){
+		 
+		 tools.remove({
+	            _id: req.params._id
+	        }, function(err, tool) {
+	            if (err)
+	                res.send(err);
+
+	           res.json({ message: 'Successfully deleted a tool' });
+	        });
+		});
+	 
+	 
 	////
 	/* app.put('/api/tools/:_id', function(request,response){
 		

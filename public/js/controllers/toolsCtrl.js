@@ -6,7 +6,7 @@ angular.module('toolsCtrl', [])
 	
 	 // hide the create form modal
 	$scope.showModal = true;
-	
+	$scope.formData={};
 	$(document).ready(function(){
 	    // initialize modal
 	    $('.modal').modal();
@@ -22,7 +22,63 @@ angular.module('toolsCtrl', [])
 		
 	});
 	
-
+	
+	// create new product from the create button in the add modal form. 
+	$scope.createTool = function(){
+	      
+		//validate the form
+		if ($scope.modalForm.form.$valid) {
+			
+			if($scope.formData.add_available==undefined){
+				
+				$scope.available_error = 'Available field is required';
+				return;
+			}//if($scope.available==undefined){
+			
+			tools.create( $scope.formData)
+			.success(function(data) {
+				 //$scope.formData = {}; // clear the form so our user is ready to enter another
+	             $scope.names = data;
+	             // console.log(data);
+		        
+	             // close modal
+			     $('#modal-product-form').modal('close');
+			     // clear modal content
+			     $scope.clearForm();
+			     
+		        //refresh the page to show the new row of  tools.
+		        $route.reload();
+		        
+		      //show a message
+		        Materialize.toast('Add a new tool', 4000);
+		        
+			})  .error(function(data, status, headers, config){
+				//show error message
+		        Materialize.toast('Unable to update record.', 4000);
+		    });
+	    
+		 }//if ($scope.modalForm.$valid) {
+		 
+       
+	}//$scope.createProduct = function(){
+	
+	$scope.showCreateForm = function(){
+		
+		// clear form
+	    $scope.clearForm();
+	     
+	    // change modal title
+	    $('#modal-product-title').text("Add New Tool");
+	     
+	    // hide update product button
+	    $('#btn-update-product').hide();
+	     
+	  
+	     
+	}//$scope.showCreateForm = function(){
+	
+	
+	//edit modal form from the edit button
 	$scope.showEditForm = function(tool_id){
 		$scope.formData={};
 	    //remove all form values from previous modal.
@@ -75,10 +131,10 @@ angular.module('toolsCtrl', [])
             
 			//since the price string has (dollars per week) in the end, split the () from the string.
 			//price field only takes a decimal in database.
-			var price_array = $scope.price.split('(');
+			//var price_array = $scope.price.split('(');
 			
 			//price decimal
-			var price = price_array[0].trim();
+			//var price = price_array[0].trim();
 		
 			//console.log('selected id '+ $scope.id);
 			//dumpObject($scope.formData);
@@ -102,6 +158,24 @@ angular.module('toolsCtrl', [])
 		 
        
 	}//$scope.updateTool = function(){
+	
+	
+	$scope.deleteTool = function(tool_id){
+		  // ask the user if he is sure to delete the record
+	    if(confirm("Do you want to delete the tool?")){
+	     
+	    	tools.delete(tool_id)
+	    	.success(function(data){
+	    		 Materialize.toast(data['message'], 4000);
+	    		//refresh the page to show the new row of  tools.
+			        $route.reload();
+	    	});
+	    	
+	    }// if(confirm("Do you want to delete the tool?")){
+		
+	}//	$scope.deleteTool = function(){
+	
+	
 	
 	// clear variable / form values
 	$scope.clearForm = function(){

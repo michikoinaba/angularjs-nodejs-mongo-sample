@@ -33,7 +33,7 @@
 										class="waves-effect waves-light btn margin-bottom-1em"
 										ng-click="showEditForm(d._id)"><i
 											class="material-icons left">edit</i>Edit</a> <a
-										ng-click="deleteProduct(d.id)"
+										ng-click="deleteTool(d._id)"
 										class="waves-effect waves-light btn margin-bottom-1em"><i
 											class="material-icons left">delete</i>Delete</a></td>
 								</tr>
@@ -157,12 +157,12 @@
 						<form name="modalForm.form" novalidate>
 							<div class="input-field col s12"
 								ng-class="{ 'has-error':  modalForm.form.type.$invalid }">
-								<input ng-model="type" type="text" name="type" id="form-type"
+								<input ng-model="formData.type" type="text" name="type" id="form-type"
 									required> <label for="type">Type</label>
 
 
 								<div class="help-block" ng-messages="modalForm.form.type.$error"
-									ng-if="modalForm.form.type.$touched">
+									ng-if=" modalForm.form.type.$touched">
 
 									<p ng-message="required">Type field is required.</p>
 								</div>
@@ -171,7 +171,7 @@
 
 							<div class="input-field col s12"
 								ng-class="{ 'has-error':  modalForm.form.name.$invalid }">
-								<input ng-model="name" type="text" class="validate" name="name"
+								<input ng-model="formData.name" type="text" class="validate" name="name"
 									id="form-name" required> <label for="name">Name</label>
 
 								<div class="help-block" ng-messages="modalForm.form.name.$error"
@@ -184,7 +184,7 @@
 
 							<div class="input-field col s12"
 								ng-class="{ 'has-error':  modalForm.form.description.$invalid }">
-								<textarea ng-model="description" type="text" name="description"
+								<textarea ng-model="formData.description" type="text" name="description"
 									class="validate materialize-textarea" required></textarea>
 								<label for="description">Description</label>
 
@@ -200,19 +200,21 @@
 								<label style="font-size: 1rem;">Available</label>
 							</p>
 							<p>
-								<input ng-model="available.value" type="radio" ng-value="1"
+								<input ng-model="formData.add_available" type="radio" ng-value="1"
 									name="available" id="available_yes" /> <label
-									for="available_yes">Yes</label> <input
-									ng-model="available.value" type="radio" ng-value="0"
+									for="available_yes">Yes</label> 
+								<input
+									ng-model="formData.add_available" type="radio" ng-value="0"
 									name="available" id="available_no" /> <label for="available_no">No</label>
 							</p>
+						
 							<p>
 								<font color="#a94442;">{{ available_error}}</font>
 							</p>
 
 							<div class="input-field col s12"
 								ng-class="{ 'has-error':  modalForm.form.price.$invalid }">
-								<input ng-model="price" type="text" name="price" id="form-price"
+								<input ng-model="formData.price" type="text" name="price" id="form-price"
 									required> <label for="price">Price</label>
 
 								<div class="help-block"
@@ -227,7 +229,7 @@
 							<div class="input-field col s12">
 								<a id="btn-create-product"
 									class="waves-effect waves-light btn margin-bottom-1em"
-									ng-click="createProduct()"><i class="material-icons left">add</i>Create</a>
+									ng-click="createTool()"><i class="material-icons left">add</i>Create</a>
 
 								<a
 									class="modal-action modal-close waves-effect waves-light btn margin-bottom-1em"><i
