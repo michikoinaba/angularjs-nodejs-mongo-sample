@@ -11,8 +11,11 @@ angular.module('app', ['ngRoute', 'appRoutes', 'rentedToolsCtrl','toolsCtrl', 'n
 
  */
 function removeItem( itemid ) {
-  var element = document.getElementById(itemid ); // will return element
+  var element='';
+  element = document.getElementById(itemid ); // will return element
+
   element.parentNode.removeChild(element); // will remove the element from DOM
+  
 }//function
 
 

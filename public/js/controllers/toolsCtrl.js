@@ -175,7 +175,47 @@ angular.module('toolsCtrl', [])
 		
 	}//	$scope.deleteTool = function(){
 	
+	//generate report
+	$scope.createReport = function(){
+		var tool_data='';
+		
+		tools.get() //tools is the table name.  populate all tools from the tools table
+		.success(function(data) {
+		
+			tool_data= data;
 	
+			 //get today's date for the file name
+		    var d = new Date();
+		    var curr_date = d.getDate();
+		    var curr_month = d.getMonth() + 1; //Months are zero based
+		    var curr_year = d.getFullYear();
+		    var today = curr_month + "-" + curr_date + "-" + curr_year;
+		 
+		    //get the tool id and remove the button tag
+		    if(tool_data !=''){
+		    
+		    	for (property in tool_data) {
+		    		//console.log(tool_data[property]._id);
+			        	
+		    		removeItem("buttons_"+tool_data[property]._id);
+		    			
+			    }//for (property in tool_data) {
+		    }//if(tool_data !=''){
+			
+
+		    //generate the spread sheet with the html table data value
+			var blob = new Blob([document.getElementById('exportable').innerHTML], {
+		         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+		    });
+		    
+			 saveAs(blob, "ToolReport-"+today+".xls");
+	       
+			 //refresh the page to show all removed buttons
+		        $route.reload();
+		    
+		});
+		 
+	}//$scope.createReport = function(){
 	
 	// clear variable / form values
 	$scope.clearForm = function(){
