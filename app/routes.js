@@ -106,40 +106,77 @@ var tools = require('./models/tools');
 	        }, function(err, tool) {
 	            if (err)
 	                res.send(err);
-
+	            else
 	           res.json({ message: 'Successfully deleted a tool' });
 	        });
 		});
 	 
+	//////////////rented_tools/////////////////////////////////////
 	 
-	////
-	/* app.put('/api/tools/:_id', function(request,response){
-		
-		
-		 var values = request.body;
-		    var id = request.params._id;
-		    tools.update({_id: id}, values, function(err, values) {
-		        if (!err) {
-		        	response.json(values);
-		        } else {
-		        	response.write("fail");
-		        }
-		    });
-		//response.json({type:request, _id: request.params._id});
-		tools.save({ _id: request.params._id },  { $set: { name: request.body.name, description: request.body.description,price: request.body.price ,
-			
-			type: request.body.type,  available: request.body.available }},
-			
-			function(err, tool){
-				if(err)
-					 return  response.send('ERROR!! '+err);
+	 //get all rented_date values.
+	 router.get('/api/rentedtools', function(req, res) {
+		 
+		 rented_tools.find({},'rented_date',function(err, data){
+			  if (err)
+              res.send(err);
+			  else
+			  res.json(data);
+		 });
+      });
+	 
+	 //get all tools for the selected rented date
+	 router.get('/api/rentedtools/:_date', function(req, res) {
+		 
+		 var all_tools=[];
+		 var selected_date = req.params._date;
+		 
+		  //res.send({'selected date ':req.params._date});
+		 rented_tools.find({'rented_date':  {'$regex': selected_date}},function(err, data){
+			  
+			 if (err){
+				 err_message= makeMongooseErrorMsgArray(err);
+				  res.send(err_message);
+			  }
+              
+			  else{
+				  
+				  var i=0;
+				  //get the length of this data
+				  var len = data.length;
 				
-				
-			});
+				  //loop thru the data object and populate tools from the tool_id
+				  for (property in data) {
+				    	var tool_id = data[property].tool_id;	 
+					    tools.findById( {_id:data[property].tool_id }, function(error, tool){
+							
+					    	var obj = tool.toObject();
+					    	//console.log(JSON.stringify(obj));
+					    	if(error){
+								return  res.send('ERROR!! '+error);
+							}
+							else{
+								//adding all tool info into all_tools object
+								all_tools.push(obj);
+								i++;
+							}//else
+					    	
+					    	//if this is the last item of the data, send the all_tools object
+					    	if(i==len){
+					    		
+					    		res.json(all_tools);
+					    	}
+					    			   
+						});
+						 
+				  }//  for (property in data) {
 			
-		
-		});
-	 */
+			  }//else
+			
+		 });
+      });
+	 
+	 
+
 	 router.get('/api/rentedtools', function(req, res) {
 		  
           // use mongoose to get all nerds in the database
@@ -181,6 +218,24 @@ var tools = require('./models/tools');
    
 }//module.exports = function(app) {
  
+/**
+ * output error message from mongoose
+ * 
+ */
+ var makeMongooseErrorMsgArray = function(err){
+	    var msgArray = [];
+	    if (err.errors) { // validation errors
+	        $.each(err.errors, function (key, val) {
+	            msgArray.push(val.message);
+	        });
+	    } else if (err.message){ // should be execution error without err.errors
+	       // errLogr.log(err); // log execution errors
+	        msgArray.push(err.message);
+	    } else {
+	        msgArray.push('Unknown error');
+	    }
+	    return msgArray;
+	}
 
 
  /**

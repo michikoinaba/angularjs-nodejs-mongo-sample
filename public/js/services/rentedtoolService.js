@@ -7,8 +7,19 @@ angular.module('RentedToolService', []).factory('rented_tools', ['$http', functi
             return $http.get('/api/rentedtools');
         },
 
-
-                // these will work when more API routes are defined on the Node side of things
+        //get all rented_date
+        getdate: function(){
+        	return $http.get('/api/rentedtools');
+        	
+        },
+        
+        //populate all tools data for the selected date
+        gettool: function(data){
+        	return $http.get('/api/rentedtools/'+date);
+        	
+        },
+        
+        
         // call to POST and create a new nerd
         create : function(data) {
             return $http.post('/api/rentedtools', data);

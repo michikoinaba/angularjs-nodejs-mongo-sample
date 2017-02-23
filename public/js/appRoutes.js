@@ -10,14 +10,12 @@
         controller: 'toolsCtrl',
         
       })
-    /*  .when('/rented', {
+      .when('/rented', {
           templateUrl: 'views/rentedtools.html',
-          controller: 'rentedCtrl',
+          controller: 'rentedToolsCtrl',
           
         })
-       
-     */
-    
+   
       .otherwise({
         redirectTo: '/'
       });

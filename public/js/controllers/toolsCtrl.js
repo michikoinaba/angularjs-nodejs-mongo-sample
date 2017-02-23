@@ -211,7 +211,7 @@ angular.module('toolsCtrl', [])
 			 saveAs(blob, "ToolReport-"+today+".xls");
 	       
 			 //refresh the page to show all removed buttons
-		        $route.reload();
+		     $route.reload();
 		    
 		});
 		 
