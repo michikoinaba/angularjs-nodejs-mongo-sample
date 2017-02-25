@@ -14,7 +14,7 @@ angular.module('RentedToolService', []).factory('rented_tools', ['$http', functi
         },
         
         //populate all tools data for the selected date
-        gettool: function(data){
+        gettool: function(date){
         	return $http.get('/api/rentedtools/'+date);
         	
         },

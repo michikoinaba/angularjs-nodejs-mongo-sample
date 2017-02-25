@@ -57,6 +57,7 @@ require('./app/routes.js')(router);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 //angularjs
 app.set('views', __dirname + '/views');
 

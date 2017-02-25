@@ -52,7 +52,8 @@ angular.module('rentedToolsCtrl', [])
 		    }// for (property in months) {
 	    	
 	    }//if(months !=''){
-	    
+	    //console.log(JSON.stringify(operators));
+	  
 	    $scope.operators =operators;
 	    
 	});
@@ -62,53 +63,142 @@ angular.module('rentedToolsCtrl', [])
 	
 	 //get the select list value and populate the month's data
 	   $scope.selectedChange = function(selected_month){
-		    console.log('selected '+selected_month );
+		   // console.log('selected '+selected_month );
 		   
 		   //hide the pie chart
 			$scope.showPieChart =false;
-			////
+		
 			rented_tools.gettool(selected_month) 
 			.success(function(data) {
-				
-				var json_string = angular.toJson(data); 
-				console.log('data '+json_string);
-				//get the json string
-				//var json_data = JSON.stringify(obj);
-				//console.log(json_data);
-				$scope.tools = json_data;
 			
-			});
-			////
-		   //console.log('selectedMonth.operator:'+$scope.selectedMonth.operator);
-		 /*   //populate tools here
-		    $http.post('get_selectedMonthRentedTools.php', {
-		        'month' : $scope.selectedMonth.operator,
-		        
-		    })
-		    .success(function(response){
-		         
-		       // dumpObject(response);
-		        $scope.tools = response.records;
-		       
-		    
-		    })
-		    .error(function(data, status, headers, config){
-		        Materialize.toast('Unable to retrieve record.', 4000);
-		    });
-		    */
+			//generate json string
+			var json_string=jQuery.parseJSON(data);
+				$scope.tools = json_string;
+			})
+			 .error(function(data, status, headers, config){
+			        Materialize.toast('Unable to retrieve record.', 4000);
+			 });
+		
 	   }//  $scope.selectedChange = function(){
 	   
 	
 	//get function
 	rented_tools.get() //rented_tools is the table name.  populate all rented_tools from the rented_tools table
 	.success(function(data) {
-		dumpObject(data[0]);
+		//dumpObject(data[0]);
 		
 		$scope.names = data;
 		
 	});
 	
-
+	
+	//show a pie chart
+	$scope.showChart = function(){
+		
+		//show or hidden the pie chart (Chart button to show/hide)
+		$scope.showPieChart =! $scope.showPieChart;
+		
+		
+		//no tools are in the table. so show the error message
+		if($scope.tools ==''){
+			message="No month is selected";
+			 Materialize.toast(message, 4000);
+			
+		}else{
+			//console.log('tool ids '+ $scope.tools);
+			
+			var tools = $scope.tools;
+			var labels=[];
+			var tool_ids=[];
+			var data=[];
+			
+			
+			 //get all rented tools ids
+			for (property in tools) {
+		    
+				 //adding into the ids array
+				tool_ids.push(tools[property]._id);
+				  
+		    }//for (property in tools) {
+			
+			//console.log(JSON.stringify(tool_ids));
+			
+			
+			//now populate all rented tools(not distinct tool_id but all duplicate tool_id to count how many time each tool was rented in the month)
+			
+			//get all tools ids.
+			rented_tools.gettool($scope.selectedMonth.operator) 
+			.success(function(data) {
+			
+				
+			//generate json string
+			  var json_string=jQuery.parseJSON(data);
+			  var allTools = json_string;
+			  
+			console.log(JSON.stringify(data));
+			  //loop thru tools obj and id obj.
+		        //get the number of tool ids that was rented.
+		        var len = tool_ids.length;
+		        for(var i = 0; i < len; i++) {
+		        	
+		        	 //count the number of each tool_id
+			        var counter=0;
+			        
+		        	for(toolProp in allTools) {
+		        		
+		        		//console.log('tool_id '+tool_ids[i] );
+		        		//console.log('allTools '+allTools[toolProp]._id);
+		        		
+		        		if(tool_ids[i] ==allTools[toolProp]._id ){
+		        			
+		        			//increment the counter
+		        			counter++;
+		        			
+		        		}//if(tool_ids[i] ==allTools[toolProp].id ){
+		           
+		           
+		        	}//for (toolProp in allTools) {
+		        	allTools.push(counter);
+					
+		        }//  for (var i = 0; i < len; i++) {
+		      
+		        //now add labels from the tool_ids
+		        for(var j = 0; j < len; j++) {
+		        	
+		        	for (prop in tools) {
+		        		
+		        		//console.log('data '+tool_ids[j] + ' tools.id '+tools[prop]._id +'tool.name '+tools[prop].name );
+		        		if(tool_ids[j] == tools[prop]._id ){
+		        			
+		        			labels.push(tools[prop].name);
+		        			
+		        		}//if(data[j] ==tools[prop].id ){
+		        		
+		        	}//for (prop in tools) {	
+		   
+		        }//  for(var j = 0; j < data_len; j++) {
+		        
+		    	//console.log(JSON.stringify(labels));
+				//console.log(JSON.stringify(allTools));
+		    	//labels
+				$scope.labels = labels;
+				
+				//chart data
+				$scope.data = allTools;
+				
+				//show legend
+				$scope.options = {legend: {display: true}};
+		    })// .success(function(response){
+		       
+			.error(function(data, status, headers, config){
+				Materialize.toast('Unable to retrieve all rented tools record.', 4000);
+			 });	
+			  
+		
+		}//else
+		
+	
+	}//$scope.showChart = function(){	
 	
 }]);//.controller('
 

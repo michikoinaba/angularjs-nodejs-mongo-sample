@@ -1,5 +1,5 @@
 
-angular.module('app', ['ngRoute', 'appRoutes', 'rentedToolsCtrl','toolsCtrl', 'navCtrl', 'RentedToolService','ToolService']);
+angular.module('app', ['ngRoute', 'appRoutes','ngSanitize','chart.js', 'rentedToolsCtrl','toolsCtrl', 'navCtrl', 'RentedToolService','ToolService']);
 
 
 

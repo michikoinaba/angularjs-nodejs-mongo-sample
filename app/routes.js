@@ -130,7 +130,7 @@ var tools = require('./models/tools');
 		 var all_tools=[];
 		 var selected_date = req.params._date;
 		 
-		  //res.send({'selected date ':req.params._date});
+		 // console.log('date in routes '+req.params._date);
 		 rented_tools.find({'rented_date':  {'$regex': selected_date}},function(err, data){
 			  
 			 if (err){
@@ -139,7 +139,7 @@ var tools = require('./models/tools');
 			  }
               
 			  else{
-				  
+				 
 				  var i=0;
 				  //get the length of this data
 				  var len = data.length;
@@ -149,22 +149,33 @@ var tools = require('./models/tools');
 				    	var tool_id = data[property].tool_id;	 
 					    tools.findById( {_id:data[property].tool_id }, function(error, tool){
 							
-					    	var obj = tool.toObject();
+					    	//var obj = tool.toObject();
 					    	//console.log(JSON.stringify(obj));
 					    	if(error){
 								return  res.send('ERROR!! '+error);
 							}
 							else{
 								//adding all tool info into all_tools object
-								all_tools.push(obj);
+								all_tools.push(tool);
 								i++;
 							}//else
 					    	
 					    	//if this is the last item of the data, send the all_tools object
 					    	if(i==len){
 					    		
-					    		res.json(all_tools);
-					    	}
+					    		//check the all_tools array and if there are any null element, remove it.
+					    		for( var k=0; k< all_tools.length; k++){
+					    			
+					    			if(all_tools[k]==null){
+					    				all_tools.splice(k, 1);
+					    				
+					    			}//if(all_tools[k]==null){
+					    		}//for( var k=0; k< all_tools.length; k++){
+					    		
+					    		//convert the array into json string
+					    		var json_string = JSON.stringify(all_tools);
+					    		res.json(json_string);
+					    	}//if(i==len){
 					    			   
 						});
 						 

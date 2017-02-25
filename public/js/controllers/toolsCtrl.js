@@ -17,7 +17,7 @@ angular.module('toolsCtrl', [])
 	tools.get() //tools is the table name.  populate all tools from the tools table
 	.success(function(data) {
 		//dumpObject(data[0]);
-		
+		//console.log(JSON.stringify(data));
 		$scope.names = data;
 		
 	});
